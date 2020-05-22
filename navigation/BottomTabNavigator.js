@@ -1,35 +1,50 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import AddMovie from '../screens/AddMovie';
+import MovieList from '../screens/MovieList';
+import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
+
+const MoviesStackNavigator = createStackNavigator();
+
+
+function MoviesStack() {
+  return (
+    <MoviesStackNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <MoviesStackNavigator.Screen name="Movies" component={MovieList} />
+      <MoviesStackNavigator.Screen name="MovieDetails" component={MovieDetailsScreen} />
+    </MoviesStackNavigator.Navigator>
+  );
+}
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+  
 
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
         name="Home"
-        component={HomeScreen}
+        component={MoviesStack}
         options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          title: 'Movie List',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-list" />,
         }}
       />
       <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
+        name="Add"
+        component={AddMovie}
         options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          title: 'Add Movie',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add" />,
         }}
       />
     </BottomTab.Navigator>
@@ -41,8 +56,8 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
+      return 'Movie List';
+    case 'Add':
+      return 'Add Movie';
   }
 }
